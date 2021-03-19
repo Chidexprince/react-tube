@@ -1,29 +1,66 @@
 import React, { Component } from 'react';
+import YTSearch from 'youtube-api-search';
 import './App.css';
 import './assets/bootstrap.css';
-import Nav from './components/nav'
-import YTSearch from 'youtube-api-search';
+import Nav from './components/nav';
+import VideoList from './components/video-list';
+import VideoDetail from './components/video-details';
 
-const API_KEY = 'AIzaSyCXnjwoRy-W19WkUUFHJicp7Kh0hp4qOWU';
+
+require('dotenv').config();
+
+const API_KEY = process.env.REACT_APP_API_KEY;
 class App extends Component {
+  state = {
+    videos: [],
+    selectedVideo: null,
+    term: 'tom and jerry'
+  }
 
-  constructor(props){
-    super(props)
-    YTSearch({key: API_KEY, term: 'songs'}, (data) => {
-      console.log(data)
+  componentDidMount(){
+
+    this.videoSearch(this.state.term)
+
+  }
+
+  videoSearch = (term) =>{
+    YTSearch({key: API_KEY, term: term}, (videos) => {
+      this.setState({
+        videos: videos,
+        selectedVideo: videos[0]
+      })
     })
+  }
+
+
+  onSelectVideo = (video) => {
+    this.setState({
+      selectedVideo: video
+    })
+  }
+
+  onSearch = (term) => {
+    this.setState({
+      term: term
+    })
+
+    this.videoSearch(this.state.term)
+
   }
  
   render () {
     return (
-      <div className="container">
-      <Nav />
-      <div className="row">
-        <div className="col-md-8">
-          hi
+      <div className="container-fluid">
+        <Nav onSearch={this.onSearch}/>
+        <div className="row p-4">
+          <div className="col-md-12 col-sm-12 col-lg-8">
+            <VideoDetail videos={this.state.selectedVideo} />
+          </div>
+          <div className="col-md-12 col-sm-12 col-lg-4">
+            <VideoList onSelectVideo={this.onSelectVideo} videos={this.state.videos} />
+          </div>
         </div>
       </div>
-    </div>
     )
   }
 }

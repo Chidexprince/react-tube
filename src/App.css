@@ -1,5 +1,3 @@
-
-
-.search {
-  width: 80% !important;
+li:hover {
+  cursor: pointer;
 }
