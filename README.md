@@ -1,4 +1,4 @@
-# Getting Started with Create React App
+# A simple YouTube clone using React and API from Google
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
